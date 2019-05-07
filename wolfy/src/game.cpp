@@ -35,3 +35,18 @@ void Game::OnDestroy()
     DeleteDC(m_renderer.memDC);
     ReleaseDC(Win32Application::GetHwnd(), m_renderer.hdc);
 }
+
+void Game::OnKeyDown(UINT8 key)
+{
+    m_keys.set(key, true);
+}
+
+void Game::OnKeyUp(UINT8 key)
+{
+    m_keys.set(key, false);
+}
+
+bool Game::GetKeyDown(UINT8 key)
+{
+    return m_keys.test(key);
+}

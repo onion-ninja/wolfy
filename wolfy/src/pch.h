@@ -6,4 +6,5 @@
 
 #include <windows.h>
 
+#include <bitset>
 #include <string>

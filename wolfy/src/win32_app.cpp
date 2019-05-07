@@ -63,6 +63,22 @@ LRESULT CALLBACK Win32Application::WndProc(HWND hWnd, UINT msg, WPARAM wParam, L
         }
         return 0;
 
+    case WM_KEYDOWN:
+        if (pGame)
+        {
+            pGame->OnKeyDown(static_cast<UINT8>(wParam));
+            InvalidateRect(hWnd, nullptr, FALSE);
+        }
+        return 0;
+
+    case WM_KEYUP:
+        if (pGame)
+        {
+            pGame->OnKeyUp(static_cast<UINT8>(wParam));
+            InvalidateRect(hWnd, nullptr, FALSE);
+        }
+        return 0;
+
     case WM_PAINT:
         {
             if (pGame)
