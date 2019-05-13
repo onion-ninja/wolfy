@@ -1,5 +1,11 @@
 #pragma once
 
+struct Vector2
+{
+    float x;
+    float y;
+};
+
 class Game
 {
 public:
@@ -32,4 +38,31 @@ private:
         HDC memDC;
         HBITMAP backBuffer;
     } m_renderer;
+
+    HPEN m_colorSideX;
+    HPEN m_colorSideY;
+    HPEN m_colorFloor;
+    HBRUSH m_colorCeiling;
+
+    struct Camera
+    {
+        Vector2 pos;
+        Vector2 dir;
+        Vector2 plane;
+    } m_cam;
+
+    static constexpr int kMaxMapDimension = 32;
+    static constexpr int kMaxMapDataSize = kMaxMapDimension * kMaxMapDimension;
+
+    struct Map
+    {
+        char& operator()(int column, int row)
+        {
+            return data[column + row * width];
+        }
+
+        int width;
+        int height;
+        std::array<char, kMaxMapDataSize> data;
+    } m_map;
 };

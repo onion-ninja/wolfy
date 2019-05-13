@@ -6,5 +6,7 @@
 
 #include <windows.h>
 
+#include <array>
 #include <bitset>
+#include <cmath>
 #include <string>
