@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "win32_app.h"
 #include "game.h"
+#include "timer.h"
 
 HWND Win32Application::m_hwnd = nullptr;
 
@@ -58,6 +59,8 @@ LRESULT CALLBACK Win32Application::WndProc(HWND hWnd, UINT msg, WPARAM wParam, L
     {
     case WM_CREATE:
         {
+            Timer::Start();
+
             LPCREATESTRUCT pCreateStruct = reinterpret_cast<LPCREATESTRUCT>(lParam);
             SetWindowLongPtr(hWnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(pCreateStruct->lpCreateParams));
         }
@@ -81,6 +84,8 @@ LRESULT CALLBACK Win32Application::WndProc(HWND hWnd, UINT msg, WPARAM wParam, L
 
     case WM_PAINT:
         {
+            Timer::Update();
+
             if (pGame)
             {
                 pGame->OnUpdate();

@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "game.h"
+#include "timer.h"
 #include "win32_app.h"
 
 constexpr int sgn(float val)
@@ -158,6 +159,60 @@ void Game::OnUpdate()
         SelectObject(m_renderer.memDC, m_colorFloor);
         MoveToEx(m_renderer.memDC, x, floor, nullptr);
         LineTo(m_renderer.memDC, x, m_height);
+    }
+
+    // Handle input
+    {
+        float dt = Timer::GetDeltaTime();
+
+        float moveSpeed = dt * 5.0f;
+        float rotSpeed = dt * 3.0f;
+
+        if (GetKeyDown(VK_LEFT))
+        {
+            float oldCamDirX = m_cam.dir.x;
+            m_cam.dir.x = m_cam.dir.x * std::cos(rotSpeed) - m_cam.dir.y * std::sin(rotSpeed);
+            m_cam.dir.y = oldCamDirX * std::sin(rotSpeed) + m_cam.dir.y * std::cos(rotSpeed);
+
+            float oldCamPlaneX = m_cam.plane.x;
+            m_cam.plane.x = m_cam.plane.x * std::cos(rotSpeed) - m_cam.plane.y * std::sin(rotSpeed);
+            m_cam.plane.y = oldCamPlaneX * std::sin(rotSpeed) + m_cam.plane.y * std::cos(rotSpeed);
+        }
+
+        if (GetKeyDown(VK_RIGHT))
+        {
+            float oldCamDirX = m_cam.dir.x;
+            m_cam.dir.x = m_cam.dir.x * std::cos(-rotSpeed) - m_cam.dir.y * std::sin(-rotSpeed);
+            m_cam.dir.y = oldCamDirX * std::sin(-rotSpeed) + m_cam.dir.y * std::cos(-rotSpeed);
+
+            float oldCamPlaneX = m_cam.plane.x;
+            m_cam.plane.x = m_cam.plane.x * std::cos(-rotSpeed) - m_cam.plane.y * std::sin(-rotSpeed);
+            m_cam.plane.y = oldCamPlaneX * std::sin(-rotSpeed) + m_cam.plane.y * std::cos(-rotSpeed);
+        }
+
+        if (GetKeyDown(VK_UP))
+        {
+            int columnX = static_cast<int>(m_cam.pos.x + m_cam.dir.x * moveSpeed);
+            int rowX = static_cast<int>(m_cam.pos.y);
+
+            int columnY = static_cast<int>(m_cam.pos.x);
+            int rowY = static_cast<int>(m_cam.pos.y + m_cam.dir.y * moveSpeed);
+
+            if (m_map(columnX, rowX) == 0) m_cam.pos.x += m_cam.dir.x * moveSpeed;
+            if (m_map(columnY, rowY) == 0) m_cam.pos.y += m_cam.dir.y * moveSpeed;
+        }
+
+        if (GetKeyDown(VK_DOWN))
+        {
+            int columnX = static_cast<int>(m_cam.pos.x - m_cam.dir.x * moveSpeed);
+            int rowX = static_cast<int>(m_cam.pos.y);
+
+            int columnY = static_cast<int>(m_cam.pos.x);
+            int rowY = static_cast<int>(m_cam.pos.y - m_cam.dir.y * moveSpeed);
+
+            if (m_map(columnX, rowX) == 0) m_cam.pos.x -= m_cam.dir.x * moveSpeed;
+            if (m_map(columnY, rowY) == 0) m_cam.pos.y -= m_cam.dir.y * moveSpeed;
+        }
     }
 }
 
