@@ -1,6 +1,6 @@
 # Wolfy
 
-An example of a level rendering using the ray tracing algorithm used in the game "Wolfenstein 3"
+An example of a level rendering using the ray tracing algorithm used in the game "Wolfenstein 3D"
 
 ## Requirements
 
